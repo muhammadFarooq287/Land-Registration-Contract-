@@ -72,7 +72,7 @@ contract landRegistration is Ownable
     uint private LandID=1;
     address public sellerAddress;
     address public buyerAddress;
-    bool landPricePaid;
+    bool landPricePaid=false;
 
     /**
     *
@@ -97,8 +97,8 @@ contract landRegistration is Ownable
     /**
     *
     *@dev Modifier used to check that the sender of function is 
-    *     whether verified Seller or not, verifier Buyer or Not,
-    *     Land is Verified or Not.
+    *     whether i) verified Seller or not, ii)verifier Buyer or Not,
+    *     iii)Land is Verified or Not.
     *
     */
     modifier IsVerifiedSeller()
@@ -353,7 +353,7 @@ contract landRegistration is Ownable
     */
 
     function buyLand(address payable _sellerAddress, uint _landId)
-    public IsVerifiedBuyer IsVerifiedLand(_landId) payable returns(uint, bool)
+    public IsVerifiedBuyer IsVerifiedLand(_landId) payable returns( bool)
     {
         require(verifySeller[_sellerAddress], "Unverified Seller");
         require(lands[LandID].landPriceInWei==msg.value, "Recheck Your Land Price in wei.");
@@ -362,7 +362,7 @@ contract landRegistration is Ownable
         landPricePaid = true;
 
         emit transferLandPrice(msg.sender, _sellerAddress, _landId, msg.value);
-        return (address(this).balance, true);
+        return  true;
     } 
 
     /*
